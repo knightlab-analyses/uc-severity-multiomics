@@ -1,0 +1,37 @@
+#!/bin/bash
+
+#PBS -N centrifuge
+#PBS -l walltime=48:00:00
+#PBS -l nodes=1:ppn=16
+#PBS -l mem=125gb
+#PBS -V
+#PBS -j oe
+#PBS -d .
+
+fqdir=/projects/mills_11549/sequencing/shotgun_20180411/Combined_lanes/trimmomatic/bowtie2
+db=/projects/genome_annotation/profiling/dbs/11K/centrifuge/WoLr1
+# centrifuge_dir=/projects/mills_11549/sequencing/shotgun_20180411/Combined_lanes/trimmomatic/bowtie2/centrifuge_genome_mapping/centrifuge
+
+set -e
+cpus=$PBS_NUM_PPN
+
+export TMPDIR=/panfs/panfs1.ucsd.edu/panscratch/$USER
+tmp=$(mktemp -d --tmpdir)
+export TMPDIR=$tmp
+trap "rm -r $tmp; unset TMPDIR" EXIT
+cd $tmp
+
+source activate centrifuge
+
+while read id
+do
+    echo $id
+    centrifuge --seed 42 -p $cpus $infile -x $db \
+        -1 $fqdir/$id.R1.trimmed.filtered.fastq.gz -2 $fqdir/$id.R2.trimmed.filtered.fastq.gz \
+        -S $id.map --report-file $id.report
+    mv $id.report $PBS_O_WORKDIR/
+    cat $id.map | grep -v $'\tunclassified\t' | \
+        xz -T$cpus -9 > $PBS_O_WORKDIR/$id.map.xz
+    centrifuge-kreport -x $db $id.map > $PBS_O_WORKDIR/$id.summary
+    rm $id.map
+done < $fqdir/../ids.txt
