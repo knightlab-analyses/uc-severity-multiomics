@@ -24,7 +24,10 @@
 - For sequencing datasets: Go to ftp://massive.ucsd.edu/MSV000086509/updates/2021-09-01_rhmills_3fdb238f/other
   - Metagenomic data processed into OGUs (https://github.com/qiyunzhu/woltka): gOTU_table_UC40_2.txt (Cohort 1) & MetaG_gOTU_table.txt (Cohort 2)
   - 16S data at level 7 taxonomy: UC_40_level-7.csv (Cohort 1) & level-7-nothaw.csv (Cohort 2)
-
+- For processed serum proteomics (Cohort 1):
+  - https://massive.ucsd.edu/ProteoSAFe/DownloadResultFile?file=f.MSV000086509/updates/2023-07-25_rhmills_ca50cd24/other/Serum_NormalizedDataAll.csv&forceDownload=true
+  - https://massive.ucsd.edu/ProteoSAFe/DownloadResultFile?file=f.MSV000086509/updates/2023-07-25_rhmills_ca50cd24/other/All_uniprot_annotations.txt&forceDownload=true
+    
 <i> For use case examples see the python notebook files (.ipynb) files here </i>
 
 Additional files can be made available upon request.
